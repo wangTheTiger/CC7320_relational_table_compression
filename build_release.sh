@@ -1,0 +1,1 @@
+g++  -std=c++17 -I ~/include -L ~/lib main.cpp -o main -lsdsl -ldivsufsort -ldivsufsort64
