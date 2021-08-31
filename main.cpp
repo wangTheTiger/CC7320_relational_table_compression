@@ -1,6 +1,8 @@
 #include <iostream>
 #include <sdsl/vectors.hpp>
 #include <sdsl/bit_vectors.hpp>
+#include <sdsl/wavelet_trees.hpp>
+#include <sdsl/wt_algorithm.hpp>
 #include <fstream>
 
 typedef std::tuple<uint64_t, uint64_t, uint64_t> spo_triple;
@@ -11,7 +13,7 @@ using row = std::deque<uint64_t>;
 using matrix = std::vector<row>;
 //using matrix = std::vector<spo_triple>;
 
-void apply_front_coding_and_vlc(std::vector<spo_triple> &D, std::string filename){
+void apply_front_coding_and_vlc(std::vector<spo_triple> &D, std::string file){
     uint64_t i;
     std::vector<spo_triple>::iterator it, triple_begin = D.begin(), triple_second = std::next(D.begin()), triple_end = D.end();
     //Optional step to calculate the input size with two flavors, first as a int_vector and then as a compressed int_vector.
@@ -81,35 +83,33 @@ void apply_front_coding_and_vlc(std::vector<spo_triple> &D, std::string filename
     {
         sdsl::vlc_vector<sdsl::coder::elias_delta> ev_d(v);
         //std::cout << "ev_d: " << ev_d << std::endl;
-        sdsl::store_to_file(ev_d, filename + ".elias_delta");
+        sdsl::store_to_file(ev_d, file + ".elias_delta");
         //std::cout << "encoded vector size : " << ev_d.size() << std::endl;
         std::cout << "Elias delta encoded vector size in megabytes      : "<< sdsl::size_in_mega_bytes(ev_d) << std::endl;
     }
     {
         sdsl::vlc_vector<sdsl::coder::elias_gamma> ev_g(v);
         //std::cout << "ev_g: " << ev_g << std::endl;
-        sdsl::store_to_file(ev_g, filename + ".elias_gamma");
+        sdsl::store_to_file(ev_g, file + ".elias_gamma");
         //std::cout << "encoded vector size : " << ev_g.size() << std::endl;
         std::cout << "Elias gamma encoded vector size in megabytes      : "<< sdsl::size_in_mega_bytes(ev_g) << std::endl;
     }
     {
         sdsl::vlc_vector<sdsl::coder::fibonacci> ev_f(v);
         //std::cout << "ev_f: " << ev_f << std::endl;
-        sdsl::store_to_file(ev_f, filename + ".fibonacci");
+        sdsl::store_to_file(ev_f, file + ".fibonacci");
         //std::cout << "encoded vector size : " << ev_f.size() << std::endl;
         std::cout << "Fibonacci encoded vector size in megabytes        : "<< sdsl::size_in_mega_bytes(ev_f) << std::endl;
     }
 }
 /**
- * get_column_as_vector retrieves a std::vector<uint64_t> corresponding to a specific column given by column_id.
- * it also pops first column out to satisfy specific requirement of the homework to improve performance.
+ * get_last_column_as_vector retrieves a std::vector<uint64_t> corresponding to the last column of table.
  * */
-std::vector<uint64_t> get_column_as_vector(int column_id, matrix &table){
+std::vector<uint64_t> get_last_column_as_vector(matrix &table){
     std::vector<uint64_t> l;//TODO: how to set the size here. should I use an std::array instead?
     int i;
     for (i = 0; i < table.size(); i++){
-        l.push_back(table[i][column_id]);
-        //table[i].pop_front();
+        l.push_back(table[i][table[i].size() - 1]);
     }
     l.shrink_to_fit();
     return l;
@@ -141,58 +141,58 @@ void print_L(std::vector<uint64_t> &L){
 }
 int main(int argc, char **argv){
     uint64_t i;
-    //int rows = 6, columns = 3;
-    //matrix name(rows, std::vector<double>(columns));
     matrix table;
-    std::string filename= argv[1];
+    std::string file= argv[1];
+    char delim = ' ';
 
     sdsl::memory_monitor::start();
     auto start = timer::now();
-    std::ifstream ifs(filename);
-    uint64_t s, p , o;
-    do {
+    std::ifstream ifs(file);
+    std::string str_line;
+    while (std::getline(ifs, str_line)){
         //TODO: only ints for initial version, to be improved.
-        ifs >> s >> p >> o;
         std::deque<uint64_t> aux;
-        aux.push_back(s);
-        aux.push_back(p);
-        aux.push_back(o);
+        // construct a stream from the string
+        std::stringstream ss(str_line);
+        std::string s;
+        while (std::getline(ss, s, delim)) {
+            int i = std::stoi(s);
+            aux.push_back((uint64_t) i);
+        }
         table.push_back(aux);
-        //table.push_back(spo_triple(s, p, o));
-        
-    } while (!ifs.eof());
-
+    }
+    ifs.close();
     table.shrink_to_fit();
     std::cout << "--Loaded " << table.size() << " rows" << " with " << table[0].size() << " columns each. " << std::endl;
-    //std::cout << "--Loaded " << table.size() << " rows" << " with 3 columns each. " << std::endl;
-    //lexicographic table sorting. 
+    //lexicographic table sorting.
     matrix::iterator it, table_begin = table.begin(), triple_end = table.end();
-    std::sort(table_begin, triple_end);//TODO: probar con stable_sort instead. es necesario? cuan lento es comparativamente?
-    
-    //std::vector<uint64_t> l_k= get_column_as_vector(table[0].size() - 1, table);
-    std::vector<uint64_t> l_k = get_column_as_vector(2, table);
-    l_k.shrink_to_fit();
+    std::sort(table_begin, triple_end);//TODO: try with stable_sort. Is it necessary? How slow is it in comparison with the former?
 
-    move_last_column_to_front(table);
-    std::sort(table_begin, triple_end);
-    pop_first_column(table);
-    
-    std::vector<uint64_t> l_k_1= get_column_as_vector(1, table);
-    l_k_1.shrink_to_fit();
+    std::vector<std::vector<uint64_t>> L;
+    int L_last_pos = 0, num_of_columns = 0;
+    //adding the last column of the table as L_j, with j in {1,..,k} backwardly.
+    L.push_back(get_last_column_as_vector(table));
+    L[L_last_pos].shrink_to_fit();
+    num_of_columns = table[0].size();
+    print_L(L[L_last_pos]);
 
-    move_last_column_to_front(table);
-    std::sort(table_begin, triple_end);
-    pop_first_column(table);
-    //move_last_column_to_front(table); //no need to do it when |column|=1
-    std::vector<uint64_t> l_k_2= get_column_as_vector(0, table);
-    l_k_2.shrink_to_fit();
-    print_L(l_k);
-    print_L(l_k_1);
-    print_L(l_k_2);
-    //apply_front_coding_and_vlc(D, filename);
+    //building Wavelet tree of L_i.
+    //sdsl::wm_int<sdsl::rrr_vector<15>> wm_test; //WE actually dont need to store the L_i!
+    //construct_im(wm_test, L[L_last_pos]);<- L Es bitvector! ver si una vez lo termino, queda listo con C.
+    
+    for(i = 1; i < num_of_columns; i++){
+        move_last_column_to_front(table);
+        std::sort(table_begin, triple_end);
+        pop_first_column(table);
+        L.push_back(get_last_column_as_vector(table));
+        L_last_pos = L.size() - 1;
+        L[L_last_pos].shrink_to_fit();
+        print_L(L[L_last_pos]);
+    }
+    //apply_front_coding_and_vlc(D, file);
     auto stop = timer::now();
     sdsl::memory_monitor::stop();
-    
+
     std::cout << std::chrono::duration_cast<std::chrono::seconds>(stop-start).count() << " seconds." << std::endl;
     std::cout << sdsl::memory_monitor::peak() << " bytes." << std::endl;
     return 0;
