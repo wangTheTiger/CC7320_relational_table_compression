@@ -7,8 +7,9 @@ typedef std::tuple<uint64_t, uint64_t, uint64_t> spo_triple;
 
 using timer = std::chrono::high_resolution_clock;
 //stable_sort with dinamic content is slow for the test data set.
-//using matrix = std::vector<std::vector<uint64_t>>;
-using matrix = std::vector<spo_triple>;
+using row = std::deque<uint64_t>;
+using matrix = std::vector<row>;
+//using matrix = std::vector<spo_triple>;
 
 void apply_front_coding_and_vlc(std::vector<spo_triple> &D, std::string filename){
     uint64_t i;
@@ -99,25 +100,45 @@ void apply_front_coding_and_vlc(std::vector<spo_triple> &D, std::string filename
         std::cout << "Fibonacci encoded vector size in megabytes        : "<< sdsl::size_in_mega_bytes(ev_f) << std::endl;
     }
 }
-
-std::vector<uint64_t> get_column_as_vector(int column_id, matrix &sorted_table){
+/**
+ * get_column_as_vector retrieves a std::vector<uint64_t> corresponding to a specific column given by column_id.
+ * it also pops first column out to satisfy specific requirement of the homework to improve performance.
+ * */
+std::vector<uint64_t> get_column_as_vector(int column_id, matrix &table){
     std::vector<uint64_t> l;//TODO: how to set the size here. should I use an std::array instead?
     int i;
-    for (i = 0; i < sorted_table.size(); i++){
-        //l.push_back(sorted_table[i][column_id]);
-        l.push_back(std::get<2>(sorted_table[i]));
+    for (i = 0; i < table.size(); i++){
+        l.push_back(table[i][column_id]);
+        //table[i].pop_front();
     }
     l.shrink_to_fit();
     return l;
-
 }
-/*
-void swap_columns(matrix &sorted_table, int col1, int col2){
+
+void move_last_column_to_front(matrix &table){
+    matrix::iterator it, end = table.end();
     int i;
-    for (i = 0; i < sorted_table.size(); i++){
-        sorted_table[i]
+    for (i = 0, it = table.begin(); it != end; it++, i++){
+        row &r = table[i];
+        r.push_front(r[r.size() - 1]);
+        r.pop_back();
     }
-}*/
+}
+void pop_first_column(matrix &table){
+    matrix::iterator it, end = table.end();
+    int i;
+    for (i = 0, it = table.begin(); it != end; it++, i++){
+        table[i].pop_front();
+    }
+}
+void print_L(std::vector<uint64_t> &L){
+    std::vector<uint64_t>::iterator it, end = L.end();
+    int i;
+    for (i = 0, it = L.begin(); it != end; it++, i++){
+        std::cout << L[i] << ' ';
+    }
+    std::cout << std::endl;
+}
 int main(int argc, char **argv){
     uint64_t i;
     //int rows = 6, columns = 3;
@@ -132,32 +153,42 @@ int main(int argc, char **argv){
     do {
         //TODO: only ints for initial version, to be improved.
         ifs >> s >> p >> o;
-        std::vector<uint64_t> aux;
+        std::deque<uint64_t> aux;
         aux.push_back(s);
         aux.push_back(p);
         aux.push_back(o);
-        //table.push_back(aux);
-        table.push_back(spo_triple(s, p, o));
+        table.push_back(aux);
+        //table.push_back(spo_triple(s, p, o));
         
     } while (!ifs.eof());
 
     table.shrink_to_fit();
-    //std::cout << "--Loaded " << table.size() << " rows" << " with " << table[0].size() << " columns each. " << std::endl;
-    std::cout << "--Loaded " << table.size() << " rows" << " with 3 columns each. " << std::endl;
+    std::cout << "--Loaded " << table.size() << " rows" << " with " << table[0].size() << " columns each. " << std::endl;
+    //std::cout << "--Loaded " << table.size() << " rows" << " with 3 columns each. " << std::endl;
     //lexicographic table sorting. 
     matrix::iterator it, table_begin = table.begin(), triple_end = table.end();
     std::sort(table_begin, triple_end);//TODO: probar con stable_sort instead. es necesario? cuan lento es comparativamente?
     
     //std::vector<uint64_t> l_k= get_column_as_vector(table[0].size() - 1, table);
-    std::vector<uint64_t> l_k= get_column_as_vector(2, table);
-    /*
-    swap_columns(table, 0, 2);
+    std::vector<uint64_t> l_k = get_column_as_vector(2, table);
+    l_k.shrink_to_fit();
+
+    move_last_column_to_front(table);
     std::sort(table_begin, triple_end);
+    pop_first_column(table);
+    
     std::vector<uint64_t> l_k_1= get_column_as_vector(1, table);
-    swap_columns(table, 0, 1);
+    l_k_1.shrink_to_fit();
+
+    move_last_column_to_front(table);
     std::sort(table_begin, triple_end);
+    pop_first_column(table);
+    //move_last_column_to_front(table); //no need to do it when |column|=1
     std::vector<uint64_t> l_k_2= get_column_as_vector(0, table);
-    */
+    l_k_2.shrink_to_fit();
+    print_L(l_k);
+    print_L(l_k_1);
+    print_L(l_k_2);
     //apply_front_coding_and_vlc(D, filename);
     auto stop = timer::now();
     sdsl::memory_monitor::stop();
