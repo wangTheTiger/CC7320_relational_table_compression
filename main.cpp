@@ -12,7 +12,7 @@ using timer = std::chrono::high_resolution_clock;
 using row = std::deque<uint64_t>;
 using matrix = std::vector<row>;
 using wm = sdsl::wm_int<sdsl::rrr_vector<15>>;
-
+/*
 void apply_front_coding_and_vlc(std::vector<spo_triple> &D, std::string file){
     uint64_t i;
     std::vector<spo_triple>::iterator it, triple_begin = D.begin(), triple_second = std::next(D.begin()), triple_end = D.end();
@@ -101,7 +101,7 @@ void apply_front_coding_and_vlc(std::vector<spo_triple> &D, std::string file){
         //std::cout << "encoded vector size : " << ev_f.size() << std::endl;
         std::cout << "Fibonacci encoded vector size in megabytes        : "<< sdsl::size_in_mega_bytes(ev_f) << std::endl;
     }
-}
+}*/
 /**
  * get_last_column_as_vector retrieves a std::vector<uint64_t> corresponding to the last column of table.
  * It also calculates C vector used for LP mapping.
@@ -243,3 +243,4 @@ int main(int argc, char **argv){
     return 0;
 }
 
+//we need to make it work properly. Create a class that stores everything. then retrieve data.
