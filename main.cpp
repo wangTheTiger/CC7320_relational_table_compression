@@ -11,7 +11,7 @@ using timer = std::chrono::high_resolution_clock;
 //stable_sort with dinamic content is slow for the test data set.
 using row = std::deque<uint64_t>;
 using matrix = std::vector<row>;
-//using matrix = std::vector<spo_triple>;
+using wm = sdsl::wm_int<sdsl::rrr_vector<15>>;
 
 void apply_front_coding_and_vlc(std::vector<spo_triple> &D, std::string file){
     uint64_t i;
@@ -104,13 +104,30 @@ void apply_front_coding_and_vlc(std::vector<spo_triple> &D, std::string file){
 }
 /**
  * get_last_column_as_vector retrieves a std::vector<uint64_t> corresponding to the last column of table.
+ * It also calculates C vector used for LP mapping.
  * */
-std::vector<uint64_t> get_last_column_as_vector(matrix &table){
+std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::map<uint64_t, uint64_t> &C){//TODO: future work, do C as bit_vector (larger alphabets)
     std::vector<uint64_t> l;//TODO: how to set the size here. should I use an std::array instead?
     int i;
+    //Map used to count instances of an element
     for (i = 0; i < table.size(); i++){
-        l.push_back(table[i][table[i].size() - 1]);
+        uint64_t number = table[i][table[i].size() - 1];
+        C[number] = C[number] + 1;
+        l.push_back(number);
     }
+
+    uint64_t count = 0, key = 0, aux = 0;
+    std::map<uint64_t, uint64_t>::iterator it, end = C.end();
+    std::cout << " C: ";
+    for (i = 0, it = C.begin(); it != end; it++, i++){
+        //gets the value of the map.
+        key = it->first;
+        aux = it->second;
+        C[key] = count;
+        std::cout << count << ' ';
+        count += aux;
+    }
+    std::cout << std::endl;
     l.shrink_to_fit();
     return l;
 }
@@ -138,6 +155,10 @@ void print_L(std::vector<uint64_t> &L){
         std::cout << L[i] << ' ';
     }
     std::cout << std::endl;
+}
+uint64_t LF(wm &wm, std::map<uint64_t, uint64_t> &C, int search_span, uint64_t symbol){
+    std::cout << "Symbol : " << symbol << " C: " << C[symbol] << " search_span : " << search_span << " rank : " << wm.rank(search_span,symbol) << std::endl;
+    return C[symbol] + wm.rank(search_span,symbol);
 }
 int main(int argc, char **argv){
     uint64_t i;
@@ -169,26 +190,50 @@ int main(int argc, char **argv){
     std::sort(table_begin, triple_end);//TODO: try with stable_sort. Is it necessary? How slow is it in comparison with the former?
 
     std::vector<std::vector<uint64_t>> L;
-    int L_last_pos = 0, num_of_columns = 0;
+    int L_last_pos = 0, num_of_rows = table.size(), num_of_columns = table[0].size();
+    std::map<uint64_t, uint64_t> C; // TODO: C is part of a class Table I have to use which contains C, WT and also LF Mapping.
     //adding the last column of the table as L_j, with j in {1,..,k} backwardly.
-    L.push_back(get_last_column_as_vector(table));
+    L.push_back(get_last_column_as_vector(table, C));
     L[L_last_pos].shrink_to_fit();
-    num_of_columns = table[0].size();
     print_L(L[L_last_pos]);
 
     //building Wavelet tree of L_i.
-    //sdsl::wm_int<sdsl::rrr_vector<15>> wm_test; //WE actually dont need to store the L_i!
-    //construct_im(wm_test, L[L_last_pos]);<- L Es bitvector! ver si una vez lo termino, queda listo con C.
-    
+    sdsl::int_vector<> v(num_of_rows);
+    for(i = 0; i < num_of_rows; i++){
+        v[i] = L[L_last_pos][i];
+    }
+    //WAVELET TEST
+    wm wm_test; //WE actually dont need to store the L_i! TODO: rrr_vector block param
+    construct_im(wm_test, v); //TODO: ver si este WM tiene el vector C :)
+    /*std::cout << "number of lines  : " << wm_test.rank(wm_test.size(), 2) << std::endl;
+    std::cout << "first '2' in line: " << wm_test.rank(wm_test.select(1, '2'),'\n')+1 << std::endl;
+    std::cout << "wt.sigma : " << wm_test.sigma << std::endl;
+    std::cout << wm_test << std::endl;
+    std::cout << "WM size in bytes : " << sdsl::size_in_bytes(wm_test) << std::endl;    */
     for(i = 1; i < num_of_columns; i++){
+        std::map<uint64_t, uint64_t> c_aux;
         move_last_column_to_front(table);
         std::sort(table_begin, triple_end);
         pop_first_column(table);
-        L.push_back(get_last_column_as_vector(table));
+        L.push_back(get_last_column_as_vector(table, c_aux));
         L_last_pos = L.size() - 1;
         L[L_last_pos].shrink_to_fit();
         print_L(L[L_last_pos]);
     }
+
+    //RETRIEVAL TEST
+    int row_num=2; //starts with 0 
+    /*int l_k_idx    = LF(wm_test, C, row_num, L[0][row_num]);
+    std::cout << "l_k_idx : " << l_k_idx <<  " L[0][row_num]: " << L[0][row_num]<< std::endl;
+    int l_k_1_idx  = LF(wm_test, C, l_k_idx, L[1][l_k_idx]);
+    std::cout << "l_k_1_idx : " << l_k_1_idx << std::endl;
+    int l_k_2_idx  = LF(wm_test, C, l_k_1_idx, L[1][l_k_1_idx]);
+    std::cout << "l_k_2_idx : " << l_k_2_idx << std::endl;
+    uint64_t l_k   = L[0][l_k_idx];
+    uint64_t l_k_1 = L[1][l_k_1_idx];
+    uint64_t l_k_2 = L[2][l_k_2_idx];
+    std::cout << "Retrieving row # "<< row_num + 1 <<" : "<< l_k_2 << " , " << l_k_1 << " , " << l_k << std::endl;*/
+    
     //apply_front_coding_and_vlc(D, file);
     auto stop = timer::now();
     sdsl::memory_monitor::stop();
