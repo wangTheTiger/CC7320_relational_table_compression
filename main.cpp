@@ -157,7 +157,7 @@ void print_L(std::vector<uint64_t> &L){
     std::cout << std::endl;
 }
 uint64_t LF(wm &wm, std::map<uint64_t, uint64_t> &C, int search_span, uint64_t symbol){
-    std::cout << "Symbol : " << symbol << " C: " << C[symbol] << " search_span : " << search_span << " rank : " << wm.rank(search_span,symbol) << std::endl;
+    std::cout << " rank : " << wm.rank(search_span,symbol) << " C: " << C[symbol] << " Symbol : " << symbol << " search_span : " << search_span << std::endl;
     return C[symbol] + wm.rank(search_span,symbol);
 }
 int main(int argc, char **argv){
@@ -168,6 +168,7 @@ int main(int argc, char **argv){
 
     sdsl::memory_monitor::start();
     auto start = timer::now();
+    /*********************** PART 1 : Read input file ***********************/
     std::ifstream ifs(file);
     std::string str_line;
     while (std::getline(ifs, str_line)){
@@ -185,31 +186,38 @@ int main(int argc, char **argv){
     ifs.close();
     table.shrink_to_fit();
     std::cout << "--Loaded " << table.size() << " rows" << " with " << table[0].size() << " columns each. " << std::endl;
+    /*********************** PART 2 : Process last column (k) ***********************/
     //lexicographic table sorting.
     matrix::iterator it, table_begin = table.begin(), triple_end = table.end();
     std::sort(table_begin, triple_end);//TODO: try with stable_sort. Is it necessary? How slow is it in comparison with the former?
 
     std::vector<std::vector<uint64_t>> L;
     int L_last_pos = 0, num_of_rows = table.size(), num_of_columns = table[0].size();
-    std::map<uint64_t, uint64_t> C; // TODO: C is part of a class Table I have to use which contains C, WT and also LF Mapping.
+    std::vector<std::map<uint64_t, uint64_t>> C;  // TODO: C is part of a class Table I have to use which contains C, WT and also LF Mapping.
     //adding the last column of the table as L_j, with j in {1,..,k} backwardly.
-    L.push_back(get_last_column_as_vector(table, C));
+    std::map<uint64_t, uint64_t> C_aux;
+    L.push_back(get_last_column_as_vector(table, C_aux));
     L[L_last_pos].shrink_to_fit();
+    C.push_back(C_aux);
     print_L(L[L_last_pos]);
 
     //building Wavelet tree of L_i.
+    std::vector<wm> wavelet_matrices;//WE actually dont need to store the L_i! TODO: define rrr_vector block param
     sdsl::int_vector<> v(num_of_rows);
-    for(i = 0; i < num_of_rows; i++){
-        v[i] = L[L_last_pos][i];
+
+    wm wm_aux;
+    for(int j = 0; j < num_of_rows; j++){
+        v[j] = L[L_last_pos][j];
     }
-    //WAVELET TEST
-    wm wm_test; //WE actually dont need to store the L_i! TODO: rrr_vector block param
-    construct_im(wm_test, v); //TODO: ver si este WM tiene el vector C :)
+    construct_im(wm_aux, v);
+    wavelet_matrices.push_back(wm_aux);
     /*std::cout << "number of lines  : " << wm_test.rank(wm_test.size(), 2) << std::endl;
     std::cout << "first '2' in line: " << wm_test.rank(wm_test.select(1, '2'),'\n')+1 << std::endl;
     std::cout << "wt.sigma : " << wm_test.sigma << std::endl;
     std::cout << wm_test << std::endl;
     std::cout << "WM size in bytes : " << sdsl::size_in_bytes(wm_test) << std::endl;    */
+
+    /*********************** PART 2 : Process k-1 ..+ 1 column ***********************/
     for(i = 1; i < num_of_columns; i++){
         std::map<uint64_t, uint64_t> c_aux;
         move_last_column_to_front(table);
@@ -218,22 +226,30 @@ int main(int argc, char **argv){
         L.push_back(get_last_column_as_vector(table, c_aux));
         L_last_pos = L.size() - 1;
         L[L_last_pos].shrink_to_fit();
+        C.push_back(C_aux);
         print_L(L[L_last_pos]);
+
+        sdsl::int_vector<> v(num_of_rows);
+        wm wm_aux;
+        for(int j = 0; j < num_of_rows; j++){
+            v[j] = L[L_last_pos][j];
+        }
+        construct_im(wm_aux, v);
+        wavelet_matrices.push_back(wm_aux);
     }
 
-    //RETRIEVAL TEST
-    int row_num=2; //starts with 0 
-    /*int l_k_idx    = LF(wm_test, C, row_num, L[0][row_num]);
-    std::cout << "l_k_idx : " << l_k_idx <<  " L[0][row_num]: " << L[0][row_num]<< std::endl;
-    int l_k_1_idx  = LF(wm_test, C, l_k_idx, L[1][l_k_idx]);
-    std::cout << "l_k_1_idx : " << l_k_1_idx << std::endl;
-    int l_k_2_idx  = LF(wm_test, C, l_k_1_idx, L[1][l_k_1_idx]);
-    std::cout << "l_k_2_idx : " << l_k_2_idx << std::endl;
-    uint64_t l_k   = L[0][l_k_idx];
-    uint64_t l_k_1 = L[1][l_k_1_idx];
-    uint64_t l_k_2 = L[2][l_k_2_idx];
-    std::cout << "Retrieving row # "<< row_num + 1 <<" : "<< l_k_2 << " , " << l_k_1 << " , " << l_k << std::endl;*/
-    
+    //RETRIEVAL
+    for (int j = 0 ; j < table.size(); j++){
+        int row_num=j;
+        int current_column_id = row_num;
+        std::string tmp_str = " ";
+        for(int i = 0 ; i < L.size(); i++){
+            tmp_str = std::to_string(L[i][current_column_id]) + " " + tmp_str;
+            current_column_id = LF(wavelet_matrices[i], C[i], current_column_id + 1, L[i][current_column_id]);
+            current_column_id -= 1;
+        }
+        std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl;
+    }
     //apply_front_coding_and_vlc(D, file);
     auto stop = timer::now();
     sdsl::memory_monitor::stop();
