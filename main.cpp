@@ -157,8 +157,8 @@ void print_L(std::vector<uint64_t> &L){
     std::cout << std::endl;
 }
 uint64_t LF(wm &wm, std::map<uint64_t, uint64_t> &C, int search_span, uint64_t symbol){
-    std::cout << " rank : " << wm.rank(search_span,symbol) << " C: " << C[symbol] << " Symbol : " << symbol << " search_span : " << search_span << std::endl;
-    return C[symbol] + wm.rank(search_span,symbol);
+    //std::cout << " rank : " << wm.rank(search_span + 1,symbol) << " C: " << C[symbol] << " Symbol : " << symbol << " search_span : " << search_span + 1 << std::endl;
+    return C[symbol] + wm.rank(search_span + 1,symbol);
 }
 int main(int argc, char **argv){
     uint64_t i;
@@ -195,10 +195,10 @@ int main(int argc, char **argv){
     int L_last_pos = 0, num_of_rows = table.size(), num_of_columns = table[0].size();
     std::vector<std::map<uint64_t, uint64_t>> C;  // TODO: C is part of a class Table I have to use which contains C, WT and also LF Mapping.
     //adding the last column of the table as L_j, with j in {1,..,k} backwardly.
-    std::map<uint64_t, uint64_t> C_aux;
-    L.push_back(get_last_column_as_vector(table, C_aux));
+    std::map<uint64_t, uint64_t> c_aux;
+    L.push_back(get_last_column_as_vector(table, c_aux));
     L[L_last_pos].shrink_to_fit();
-    C.push_back(C_aux);
+    C.push_back(c_aux);
     print_L(L[L_last_pos]);
 
     //building Wavelet tree of L_i.
@@ -226,7 +226,7 @@ int main(int argc, char **argv){
         L.push_back(get_last_column_as_vector(table, c_aux));
         L_last_pos = L.size() - 1;
         L[L_last_pos].shrink_to_fit();
-        C.push_back(C_aux);
+        C.push_back(c_aux);
         print_L(L[L_last_pos]);
 
         sdsl::int_vector<> v(num_of_rows);
@@ -239,16 +239,18 @@ int main(int argc, char **argv){
     }
 
     //RETRIEVAL
+    uint64_t current_value = 0;
     for (int j = 0 ; j < table.size(); j++){
         int row_num=j;
         int current_column_id = row_num;
-        std::string tmp_str = " ";
+        std::string tmp_str = "";
         for(int i = 0 ; i < L.size(); i++){
-            tmp_str = std::to_string(L[i][current_column_id]) + " " + tmp_str;
-            current_column_id = LF(wavelet_matrices[i], C[i], current_column_id + 1, L[i][current_column_id]);
+            current_value = L[i][current_column_id];
+            tmp_str = std::to_string(current_value) + " " + tmp_str;
+            current_column_id = LF(wavelet_matrices[i], C[i], current_column_id, current_value);
             current_column_id -= 1;
         }
-        std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl;
+        std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl; //FALLA EL 1ro y el ultimo. Mayor refactoring.
     }
     //apply_front_coding_and_vlc(D, file);
     auto stop = timer::now();
