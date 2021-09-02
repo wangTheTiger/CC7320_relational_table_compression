@@ -12,7 +12,7 @@
             //"args": ["../../../Ring/dat/wikidata-filtered-enumerated.dat"],
             //"args": ["../../../Ring/dat/wikidata-filtered-enumerated-reduced.dat"],
             "args": ["test.dat"],
-            "stopAtEntry": true,
+            "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,

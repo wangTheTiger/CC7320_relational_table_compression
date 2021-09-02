@@ -118,13 +118,13 @@ std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::map<uint64_t
 
     uint64_t count = 0, key = 0, aux = 0;
     std::map<uint64_t, uint64_t>::iterator it, end = C.end();
-    std::cout << " C: ";
+    //std::cout << "C: ";
     for (i = 0, it = C.begin(); it != end; it++, i++){
         //gets the value of the map.
         key = it->first;
         aux = it->second;
         C[key] = count;
-        std::cout << count << ' ';
+        std::cout << key << ":" << count << ' ';
         count += aux;
     }
     std::cout << std::endl;
@@ -151,6 +151,7 @@ void pop_first_column(matrix &table){
 void print_L(std::vector<uint64_t> &L){
     std::vector<uint64_t>::iterator it, end = L.end();
     int i;
+    //std::cout << "L: ";
     for (i = 0, it = L.begin(); it != end; it++, i++){
         std::cout << L[i] << ' ';
     }
@@ -222,7 +223,7 @@ int main(int argc, char **argv){
         std::map<uint64_t, uint64_t> c_aux;
         move_last_column_to_front(table);
         std::sort(table_begin, triple_end);
-        pop_first_column(table);
+        //pop_first_column(table);
         L.push_back(get_last_column_as_vector(table, c_aux));
         L_last_pos = L.size() - 1;
         L[L_last_pos].shrink_to_fit();
