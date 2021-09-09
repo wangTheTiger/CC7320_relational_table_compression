@@ -251,7 +251,7 @@ int main(int argc, char **argv){
             current_column_id = LF(wavelet_matrices[i], C[i], current_column_id, current_value);
             current_column_id -= 1;
         }
-        std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl; //FALLA EL 1ro y el ultimo. Mayor refactoring.
+        std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl; 
     }
     //apply_front_coding_and_vlc(D, file);
     auto stop = timer::now();
