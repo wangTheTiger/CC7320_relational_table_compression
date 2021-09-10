@@ -5,13 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "relational_table_compression",
+            "name": "relational_table_compression compress_table",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/main",
+            "program": "${workspaceFolder}/compress_table",
             //"args": ["../../../Ring/dat/wikidata-filtered-enumerated.dat"],
             //"args": ["../../../Ring/dat/wikidata-filtered-enumerated-reduced.dat"],
-            "args": ["test.dat"],
+            //"args": ["test.dat"],
+            "args": ["dl_attempts_export.csv_mapping.dat"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
