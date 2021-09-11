@@ -4,3 +4,4 @@ main
 process_csv
 *.C 
 *.WM
+*.metadata

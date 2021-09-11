@@ -4,6 +4,9 @@
 #include <sdsl/wavelet_trees.hpp>
 #include <sdsl/wt_algorithm.hpp>
 #include <fstream>
+#include <boost/serialization/map.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
 
 using timer = std::chrono::high_resolution_clock;
 //stable_sort with dinamic content is slow for the test data set.
@@ -11,16 +14,11 @@ using row = std::deque<uint64_t>;
 using matrix = std::vector<row>;
 using wm = sdsl::wm_int<sdsl::rrr_vector<15>>;
 
-typedef sdsl::bit_vector C_type;
-typedef sdsl::rank_support_v<> C_rank_type;
-typedef sdsl::select_support_mcl<> C_select_type;
-typedef sdsl::select_support_mcl<0> C_select0_type;
-
 /**
  * get_last_column_as_vector retrieves a std::vector<uint64_t> corresponding to the last column of table.
  * It also calculates C vector used for LP mapping.
  * */
-std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::map<uint64_t, uint64_t> &C, std::string &file, C_type &C_){//TODO: future work, do C as bit_vector (larger alphabets)
+std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::map<uint64_t, uint64_t> &C){//TODO: future work, do C as bit_vector (larger alphabets)
     std::vector<uint64_t> l;//TODO: how to set the size here. should I use an std::array instead?
     int i;
     //C as SDSL bit vector with Rank support
@@ -45,10 +43,6 @@ std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::map<uint64_t
         //std::cout << key << ":" << count << ' ';
         count += aux;
     }
-    //C as SDSL bit vector
-    C_type C_bv(C_aux);
-    C_select_type C_select;
-    C_ = C_bv;
     l.shrink_to_fit();
     return l;
 }
@@ -82,10 +76,6 @@ void print_L(std::vector<uint64_t> &L){
 uint64_t LF(wm &wm, std::map<uint64_t, uint64_t> &C, int search_span, uint64_t symbol){
     //std::cout << "result: " << C[symbol] + wm.rank(search_span + 1,symbol) << " rank : " << wm.rank(search_span + 1,symbol) << " C: " << C[symbol] << " Symbol : " << symbol << " search_span : " << search_span + 1 << std::endl;
     return C[symbol] + wm.rank(search_span + 1,symbol);
-}
-uint64_t LF_2(wm &wm, C_rank_type &C_rank, int search_span, uint64_t symbol){
-    //std::cout << "result: " << C_rank(symbol + 1) + wm.rank(search_span + 1,symbol) << " rank : " << wm.rank(search_span + 1,symbol) << " C: " << C_rank(symbol)  << " Symbol : " << symbol << " search_span : " << search_span + 1 << std::endl;
-    return C_rank(symbol + 1) + wm.rank(search_span + 1,symbol);
 }
 int main(int argc, char **argv){
     uint64_t i;
@@ -128,11 +118,17 @@ int main(int argc, char **argv){
         //adding the last column of the table as L_j, with j in {1,..,k} backwardly.
 
         std::map<uint64_t, uint64_t> c_aux;
-        C_type C_bv;
-        L.push_back(get_last_column_as_vector(table, c_aux, file, C_bv));
-        sdsl::store_to_file(C_bv, file + "_0.C");
+        L.push_back(get_last_column_as_vector(table, c_aux));
+        {
+            //Save c_aux map.
+            std::ofstream sof( file + "_0.C");
+            boost::archive::binary_oarchive oarch2(sof);
+            //oarch2 << map;
+            // Save the data
+            oarch2 &c_aux;
+        }
         L[L_last_pos].shrink_to_fit();
-        C.push_back(c_aux); // to be commetned
+        C.push_back(c_aux); // to be commented
         //print_L(L[L_last_pos]);
 
         //building Wavelet tree of L_i.
@@ -154,12 +150,18 @@ int main(int argc, char **argv){
             move_last_column_to_front(table);
             std::sort(table_begin, triple_end);
             //pop_first_column(table);
-            C_type C_bv;//TODO: Mem leaks?
-            L.push_back(get_last_column_as_vector(table, c_aux, file, C_bv));
-            sdsl::store_to_file(C_bv, file + "_"+std::to_string(i)+".C");
+            L.push_back(get_last_column_as_vector(table, c_aux));
+            {
+                //Save c_aux map.
+                std::ofstream sof( file + "_"+std::to_string(i)+".C");
+                boost::archive::binary_oarchive oarch2(sof);
+                //oarch2 << map;
+                // Save the data
+                oarch2 &c_aux;
+            }
             L_last_pos = L.size() - 1;
             L[L_last_pos].shrink_to_fit();
-            C.push_back(c_aux);
+            C.push_back(c_aux);//To be commented
             //print_L(L[L_last_pos]);
 
             sdsl::int_vector<> v(num_of_rows);
@@ -198,7 +200,7 @@ int main(int argc, char **argv){
     {
         int num_of_rows = 0, num_of_columns = 0;
         std::vector<wm> wavelet_matrices;
-        std::vector<C_rank_type> C;
+        std::vector<std::map<uint64_t, uint64_t>> C;
         //TEST LOADING FROM FILE AND RETRIEVING.
         //LOAD STORED WM & C arrays
         std::ifstream ifs(file + ".metadata");
@@ -209,18 +211,14 @@ int main(int argc, char **argv){
             wm wm_aux;
             sdsl::load_from_file(wm_aux, file+"_"+std::to_string(i)+".WM");
             wavelet_matrices.push_back(wm_aux);
-            C_type *C_bv = new C_type;
-            C_rank_type C_rank;
-            C_select_type C_select;
-            sdsl::load_from_file(*C_bv, file + "_"+std::to_string(i)+".C");
-            //El problema puede ser con C_select porque C_bv trae 20 columnas x cada fila. :)
-            /*for (int j = 0; j < C_bv->size(); j++){
-                std::cout << "C_bv["<<std::to_string(j) << "] : " << C_bv[j] << std::endl;
-            }*/
-            sdsl::util::init_support(C_rank,C_bv);
-            sdsl::util::init_support(C_select,C_bv);
-            //C.push_back(C_select);
-            C.push_back(C_rank);
+            //loading C's
+            {
+                std::map<uint64_t, uint64_t> C_aux;
+                std::ifstream sif( file+"_"+std::to_string(i)+".C");
+                boost::archive::binary_iarchive iarch2(sif);
+                iarch2 &C_aux;
+                C.push_back(C_aux);
+            }
         }
         //RETRIEVAL
         uint64_t current_value = 0;
@@ -232,7 +230,7 @@ int main(int argc, char **argv){
                 current_value = wavelet_matrices[i][current_column_id];//TODO> why do I need L to get current value? can't I use the wavelet matrix instead?
                 tmp_str = std::to_string(current_value) + " " + tmp_str;
                 //std::cout << wavelet_matrices[i][current_column_id]<<std::endl;
-                current_column_id = LF_2(wavelet_matrices[i], C[i], current_column_id, current_value);
+                current_column_id = LF(wavelet_matrices[i], C[i], current_column_id, current_value);
                 current_column_id -= 1;
             }
             std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl;
