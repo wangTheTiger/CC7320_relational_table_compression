@@ -180,7 +180,7 @@ int main(int argc, char **argv){
         ofs.close();
     }
     {
-        //RETRIEVAL
+        //RETRIEVAL - old method if we want to do it in one step.
         uint64_t current_value = 0;
         for (int j = 0 ; j < num_of_rows; j++){
             int row_num=j;
