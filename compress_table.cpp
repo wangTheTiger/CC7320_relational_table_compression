@@ -21,14 +21,10 @@ using wm = sdsl::wm_int<sdsl::rrr_vector<15>>;
 std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::map<uint64_t, uint64_t> &C){//TODO: future work, do C as bit_vector (larger alphabets)
     std::vector<uint64_t> l;//TODO: how to set the size here. should I use an std::array instead?
     int i;
-    //C as SDSL bit vector with Rank support
-    sdsl::bit_vector C_aux = sdsl::bit_vector(table[0].size());
-
+    
     for (i = 0; i < table.size(); i++){
         uint64_t number = table[i][table[i].size() - 1];
         C[number] = C[number] + 1;
-        //std::cout << "assigning 1 to C_aux["<<number << "]" << std::endl;
-        C_aux[number] = 1;
         l.push_back(number);
     }
     //C as std::map<uint64_t, uint64_t> &C
@@ -128,7 +124,7 @@ int main(int argc, char **argv){
             oarch2 &c_aux;
         }
         L[L_last_pos].shrink_to_fit();
-        C.push_back(c_aux); // to be commented
+        //C.push_back(c_aux); // to be commented
         //print_L(L[L_last_pos]);
 
         //building Wavelet tree of L_i.
@@ -141,7 +137,7 @@ int main(int argc, char **argv){
 
         std::cout << "creating Wavelet trees"  << std::endl;
         construct_im(wm_aux, v);
-        wavelet_matrices.push_back(wm_aux);//--to be commented
+        //wavelet_matrices.push_back(wm_aux);//--to be commented
         sdsl::store_to_file(wm_aux, file + "_0.WM");
         std::cout << " > wavelet tree #1 ready" << std::endl;
         /*********************** PART 2 : Process k-1 ..+ 1 column ***********************/
@@ -161,7 +157,7 @@ int main(int argc, char **argv){
             }
             L_last_pos = L.size() - 1;
             L[L_last_pos].shrink_to_fit();
-            C.push_back(c_aux);//To be commented
+            //C.push_back(c_aux);//to be commented
             //print_L(L[L_last_pos]);
 
             sdsl::int_vector<> v(num_of_rows);
@@ -170,7 +166,7 @@ int main(int argc, char **argv){
                 v[j] = L[L_last_pos][j];
             }
             construct_im(wm_aux, v);
-            wavelet_matrices.push_back(wm_aux); // to be commented
+            //wavelet_matrices.push_back(wm_aux); // to be commented
             sdsl::store_to_file(wm_aux, file + "_"+std::to_string(i)+".WM");
             std::cout << " > wavelet tree #" <<  i+1 << " ready" << std::endl;
         }
@@ -179,7 +175,7 @@ int main(int argc, char **argv){
         ofs << num_of_columns << std::endl;
         ofs.close();
     }
-    {
+    /*{
         //RETRIEVAL - old method if we want to do it in one step.
         uint64_t current_value = 0;
         for (int j = 0 ; j < num_of_rows; j++){
@@ -195,8 +191,10 @@ int main(int argc, char **argv){
             }
             std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl; 
         }
-    }
+    }*/
 
+
+    /*
     {
         int num_of_rows = 0, num_of_columns = 0;
         std::vector<wm> wavelet_matrices;
@@ -236,6 +234,7 @@ int main(int argc, char **argv){
             std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl;
         }
     }
+*/
     //apply_front_coding_and_vlc(D, file);
     auto stop = timer::now();
     sdsl::memory_monitor::stop();
