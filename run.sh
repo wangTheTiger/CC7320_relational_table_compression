@@ -11,7 +11,7 @@ then
 fi
 echo "working file : $file"
 echo "Processing..."
-./main $file
+./compress_table $file
 
 #ls -lh $file
 rm -f "$file.elias_delta"

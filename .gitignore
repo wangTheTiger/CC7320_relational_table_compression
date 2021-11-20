@@ -5,3 +5,5 @@ process_csv
 *.C 
 *.WM
 *.metadata
+compress_table
+retrieve_table

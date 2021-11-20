@@ -78,7 +78,7 @@ int main(int argc, char **argv){
     std::string file= argv[1];
     char delim = ' ';
     int num_of_rows = 0;
-    std::vector<wm> wavelet_matrices;//WE actually dont need to store the L_i! TODO: define rrr_vector block param
+    //std::vector<wm> wavelet_matrices;//WE actually dont need to store the L_i! TODO: define rrr_vector block param
     //Custom C representation - TODO: think about migrating it entirely to SDSL way of doing C array.
     std::vector<std::map<uint64_t, uint64_t>> C;
     sdsl::memory_monitor::start();
