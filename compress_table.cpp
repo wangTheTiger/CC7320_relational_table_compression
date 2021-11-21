@@ -13,32 +13,73 @@ using timer = std::chrono::high_resolution_clock;
 using row = std::deque<uint64_t>;
 using matrix = std::vector<row>;
 using wm = sdsl::wm_int<sdsl::rrr_vector<15>>;
+typedef sdsl::select_support_mcl<> C_select_type;
 
+typedef sdsl::bit_vector C_type;
+typedef sdsl::rank_support_v<> C_rank_type;
+typedef sdsl::select_support_mcl<> C_select_type;
+typedef sdsl::select_support_mcl<0> C_select0_type;
+
+C_type *C_bv;
+C_rank_type C_rank;
+C_select_type C_select;
+C_select0_type C_select0;
 /**
  * get_last_column_as_vector retrieves a std::vector<uint64_t> corresponding to the last column of table.
  * It also calculates C vector used for LP mapping.
  * */
-std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::map<uint64_t, uint64_t> &C){//TODO: future work, do C as bit_vector (larger alphabets)
+std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::string filename){//TODO: Make it a class so C_bv is a member and not an output parameter
     std::vector<uint64_t> l;//TODO: how to set the size here. should I use an std::array instead?
     int i;
-    
-    for (i = 0; i < table.size(); i++){
-        uint64_t number = table[i][table[i].size() - 1];
-        C[number] = C[number] + 1;
+    uint64_t num_rows = table.size();
+    //calculate alphabet. It also calculates L in first loop
+    std::set<uint64_t> alphabet;
+    int last_column_id = table[0].size() - 1;
+    for (i = 0; i < num_rows; i++){
+        uint64_t number = table[i][last_column_id];
+        alphabet.insert(number);
         l.push_back(number);
     }
-    //C as std::map<uint64_t, uint64_t> &C
-    uint64_t count = 0, key = 0, aux = 0;
-    std::map<uint64_t, uint64_t>::iterator it, end = C.end();
-    //std::cout << "C: ";
-    for (i = 0, it = C.begin(); it != end; it++, i++){
-        //gets the value of the map.
-        key = it->first;
-        aux = it->second;
-        C[key] = count;
-        //std::cout << key << ":" << count << ' ';
-        count += aux;
+    uint64_t max_alphabet = *alphabet.rbegin();
+    std::cout << " max_alphabet: " << max_alphabet << " alphabet size : " << alphabet.size() << " num_rows : " << num_rows << " last_column_id: "<< last_column_id << std::endl;
+    std::vector<uint64_t> v_aux(max_alphabet+1);
+    for (i = 0; i <= max_alphabet; i++){
+        //std::cout << " v_aux attempting to store 0 in pos: " << i << std::endl;
+        v_aux[i] = 0;
     }
+    for (i = 0; i < num_rows; i++){
+        //std::cout << " table[i][last_column_id] : " << table[i][last_column_id] << std::endl;
+        v_aux[table[i][last_column_id]]++;
+    }
+    //Calculate C array
+    uint64_t cur_pos = 1;
+    std::vector<uint64_t> C_;
+    C_.push_back(0); // Dummy value
+    C_.push_back(cur_pos);
+    for (int c = 2; c <= max_alphabet; c++){
+        cur_pos += v_aux[c - 1];
+        C_.push_back(cur_pos);
+    }
+    C_.push_back(num_rows + 1);
+    C_.shrink_to_fit();
+
+    alphabet.clear();
+    v_aux.clear();
+    //Create C array as bit vector ( saves space )
+    sdsl::bit_vector C_aux = sdsl::bit_vector(C_[C_.size()-1]+1+C_.size(), 0);
+
+    for (uint64_t i=0; i < C_.size(); i++) {
+        //std::cout << " en pos C_["<<i<<"] : " << C_[i] << "+i = " << C_[i]+i << " se asigna un 1"<< std::endl;
+        C_aux[C_[i]+i] = 1;
+    }
+    C_bv = new C_type(C_aux);
+    sdsl::util::init_support(C_rank,C_bv);
+    sdsl::util::init_support(C_select,C_bv);
+    sdsl::util::init_support(C_select0,C_bv);
+    std::cout << "C_bv : " << *C_bv << " C_bv->size() : " << C_bv->size() << std::endl;
+
+    sdsl::store_to_file(*C_bv, filename);
+    //3. return the last column as vector
     l.shrink_to_fit();
     return l;
 }
@@ -80,7 +121,7 @@ int main(int argc, char **argv){
     int num_of_rows = 0;
     //std::vector<wm> wavelet_matrices;//WE actually dont need to store the L_i! TODO: define rrr_vector block param
     //Custom C representation - TODO: think about migrating it entirely to SDSL way of doing C array.
-    std::vector<std::map<uint64_t, uint64_t>> C;
+    //std::vector<std::map<uint64_t, uint64_t>> C;
     sdsl::memory_monitor::start();
     auto start = timer::now();
     /*********************** PART 1 : Read input file ***********************/
@@ -113,18 +154,9 @@ int main(int argc, char **argv){
         int L_last_pos = 0, num_of_columns = table[0].size();
         //adding the last column of the table as L_j, with j in {1,..,k} backwardly.
 
-        std::map<uint64_t, uint64_t> c_aux;
-        L.push_back(get_last_column_as_vector(table, c_aux));
-        {
-            //Save c_aux map.
-            std::ofstream sof( file + "_0.C");
-            boost::archive::binary_oarchive oarch2(sof);
-            //oarch2 << map;
-            // Save the data
-            oarch2 &c_aux;
-        }
+        sdsl::bit_vector c_bitvector;
+        L.push_back(get_last_column_as_vector(table,file + "_0.C"));
         L[L_last_pos].shrink_to_fit();
-        //C.push_back(c_aux); // to be commented
         //print_L(L[L_last_pos]);
 
         //building Wavelet tree of L_i.
@@ -142,22 +174,12 @@ int main(int argc, char **argv){
         std::cout << " > wavelet tree #1 ready" << std::endl;
         /*********************** PART 2 : Process k-1 ..+ 1 column ***********************/
         for(i = 1; i < num_of_columns; i++){
-            std::map<uint64_t, uint64_t> c_aux;
             move_last_column_to_front(table);
             std::sort(table_begin, triple_end);
             //pop_first_column(table);
-            L.push_back(get_last_column_as_vector(table, c_aux));
-            {
-                //Save c_aux map.
-                std::ofstream sof( file + "_"+std::to_string(i)+".C");
-                boost::archive::binary_oarchive oarch2(sof);
-                //oarch2 << map;
-                // Save the data
-                oarch2 &c_aux;
-            }
+            L.push_back(get_last_column_as_vector(table, file + "_"+std::to_string(i)+".C"));
             L_last_pos = L.size() - 1;
             L[L_last_pos].shrink_to_fit();
-            //C.push_back(c_aux);//to be commented
             //print_L(L[L_last_pos]);
 
             sdsl::int_vector<> v(num_of_rows);
@@ -175,67 +197,6 @@ int main(int argc, char **argv){
         ofs << num_of_columns << std::endl;
         ofs.close();
     }
-    /*{
-        //RETRIEVAL - old method if we want to do it in one step.
-        uint64_t current_value = 0;
-        for (int j = 0 ; j < num_of_rows; j++){
-            int row_num=j;
-            int current_column_id = row_num;
-            std::string tmp_str = "";
-            for(int i = 0 ; i < wavelet_matrices.size(); i++){ // all of the WM have the same size.
-                current_value = wavelet_matrices[i][current_column_id];//TODO> why do I need L to get current value? can't I use the wavelet matrix instead?
-                tmp_str = std::to_string(current_value) + " " + tmp_str;
-                //std::cout << wavelet_matrices[i][current_column_id]<<std::endl;
-                current_column_id = LF(wavelet_matrices[i], C[i], current_column_id, current_value);
-                current_column_id -= 1;
-            }
-            std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl; 
-        }
-    }*/
-
-
-    /*
-    {
-        int num_of_rows = 0, num_of_columns = 0;
-        std::vector<wm> wavelet_matrices;
-        std::vector<std::map<uint64_t, uint64_t>> C;
-        //TEST LOADING FROM FILE AND RETRIEVING.
-        //LOAD STORED WM & C arrays
-        std::ifstream ifs(file + ".metadata");
-        ifs >> num_of_rows;
-        ifs >> num_of_columns;
-
-        for ( int i = 0 ; i < num_of_columns; i++){
-            wm wm_aux;
-            sdsl::load_from_file(wm_aux, file+"_"+std::to_string(i)+".WM");
-            wavelet_matrices.push_back(wm_aux);
-            //loading C's
-            {
-                std::map<uint64_t, uint64_t> C_aux;
-                std::ifstream sif( file+"_"+std::to_string(i)+".C");
-                boost::archive::binary_iarchive iarch2(sif);
-                iarch2 &C_aux;
-                C.push_back(C_aux);
-            }
-        }
-        //RETRIEVAL
-        uint64_t current_value = 0;
-        for (int j = 0 ; j < num_of_rows; j++){
-            int row_num=j;
-            int current_column_id = row_num;
-            std::string tmp_str = "";
-            for(int i = 0 ; i < wavelet_matrices.size(); i++){ // all of the WM have the same size.
-                current_value = wavelet_matrices[i][current_column_id];//TODO> why do I need L to get current value? can't I use the wavelet matrix instead?
-                tmp_str = std::to_string(current_value) + " " + tmp_str;
-                //std::cout << wavelet_matrices[i][current_column_id]<<std::endl;
-                current_column_id = LF(wavelet_matrices[i], C[i], current_column_id, current_value);
-                current_column_id -= 1;
-            }
-            std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl;
-        }
-    }
-*/
-    //apply_front_coding_and_vlc(D, file);
     auto stop = timer::now();
     sdsl::memory_monitor::stop();
 
