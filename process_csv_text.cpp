@@ -20,25 +20,8 @@ std::string readFileIntoString(const std::string& path) {
     return ss.str();
 }
 
-
-/*
-//saving additional mapping structures.
-        std::ofstream ext_to_int_ofs( filename + "_ext_to_int.dat" );
-        for(auto &item : ext_to_int){
-            ext_to_int_ofs << item.first << ' ' << item.second << endl;
-        }
-        ext_to_int_ofs.close();
-        //load additional mapping structures
-        std::ifstream ext_to_int_ifs( filename + "_ext_to_int.dat" );
-        u_int64_t key, value;
-        while (ext_to_int_ifs >> key >> value){
-            if(!ext_to_int[key]){
-                ext_to_int[key] = value;
-            }
-        }
-        ext_to_int_ifs.close();
-*/
 int main(int argc, char **argv){
+    //TODO: save the content as binary file.
     std::string file_name= argv[1];
 
     sdsl::memory_monitor::start();
@@ -63,10 +46,11 @@ int main(int argc, char **argv){
     while (std::getline(sstream, record)) {
         std::istringstream line(record);
         while (std::getline(line, record, delimiter)) {
-            //save it to an output file
+            //check if entry is in map, if is not then define it.
             if (!m[record]){
                 m[record] = current_id++;
             }
+            //save it to an output file
             output_file << m[record]  << " ";
             //output_file << record  << " ";
         }
@@ -77,7 +61,7 @@ int main(int argc, char **argv){
 
     auto stop = timer::now();
     sdsl::memory_monitor::stop();
-    
+
     std::cout << std::chrono::duration_cast<std::chrono::seconds>(stop-start).count() << " seconds." << std::endl;
     std::cout << sdsl::memory_monitor::peak() << " bytes." << std::endl;
     exit(EXIT_SUCCESS);
