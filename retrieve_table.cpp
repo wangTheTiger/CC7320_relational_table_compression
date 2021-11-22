@@ -23,13 +23,9 @@ C_type *C_bv;
 C_rank_type C_rank;
 C_select_type C_select;
 C_select0_type C_select0;
-/*
-uint64_t LF(wm &wm, std::map<uint64_t, uint64_t> &C, int search_span, uint64_t symbol){
-    //std::cout << "result: " << C[symbol] + wm.rank(search_span + 1,symbol) << " rank : " << wm.rank(search_span + 1,symbol) << " C: " << C[symbol] << " Symbol : " << symbol << " search_span : " << search_span + 1 << std::endl;
-    return C[symbol] + wm.rank(search_span + 1,symbol);
-}*/
+
 uint64_t LF(wm &wm, C_select_type &C_select, int search_span, uint64_t symbol){
-    std::cout << "results C_select(symbol+1):" << C_select(symbol+1) << " wm.rank : " << wm.rank(search_span + 1,symbol) << " rank : " << wm.rank(search_span + 1,symbol) << " Symbol : " << symbol << " search_span : " << search_span + 1 << std::endl;
+    //std::cout << "results C_select(symbol+1):" << C_select(symbol+1) << " wm.rank : " << wm.rank(search_span + 1,symbol) << " rank : " << wm.rank(search_span + 1,symbol) << " Symbol : " << symbol << " search_span : " << search_span + 1 << std::endl;
     return C_select(symbol+1)-symbol-1 + wm.rank(search_span + 1,symbol);
 }
 int main(int argc, char **argv){
@@ -76,10 +72,10 @@ int main(int argc, char **argv){
             for(int i = 0 ; i < wavelet_matrices.size(); i++){ // all of the WM have the same size.
                 current_value = wavelet_matrices[i][current_column_id];//TODO> why do I need L to get current value? can't I use the wavelet matrix instead?
                 tmp_str = std::to_string(current_value) + " " + tmp_str;
-                std::cout << tmp_str << " - " << wavelet_matrices[i][current_column_id]<<std::endl;
+                //std::cout << tmp_str << " - " << wavelet_matrices[i][current_column_id]<<std::endl;
                 current_column_id = LF(wavelet_matrices[i], C_select[i], current_column_id, current_value);
                 current_column_id -= 1;
-                std::cout << "current_column_id = " << current_column_id << std::endl;
+                //std::cout << "current_column_id = " << current_column_id << std::endl;
             }
             std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl;
         }

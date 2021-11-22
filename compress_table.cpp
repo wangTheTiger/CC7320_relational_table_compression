@@ -76,7 +76,7 @@ std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::string filen
     sdsl::util::init_support(C_rank,C_bv);
     sdsl::util::init_support(C_select,C_bv);
     sdsl::util::init_support(C_select0,C_bv);
-    std::cout << "C_bv : " << *C_bv << " C_bv->size() : " << C_bv->size() << std::endl;
+    //std::cout << "C_bv : " << *C_bv << " C_bv->size() : " << C_bv->size() << std::endl;
 
     sdsl::store_to_file(*C_bv, filename);
     //3. return the last column as vector
