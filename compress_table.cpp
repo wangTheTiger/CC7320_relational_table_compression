@@ -41,7 +41,7 @@ std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::string filen
         l.push_back(number);
     }
     uint64_t max_alphabet = *alphabet.rbegin();
-    std::cout << " max_alphabet: " << max_alphabet << " alphabet size : " << alphabet.size() << " num_rows : " << num_rows << " last_column_id: "<< last_column_id << std::endl;
+    //std::cout << " max_alphabet: " << max_alphabet << " alphabet size : " << alphabet.size() << " num_rows : " << num_rows << " last_column_id: "<< last_column_id << std::endl;
     std::vector<uint64_t> v_aux(max_alphabet+1);
     for (i = 0; i <= max_alphabet; i++){
         //std::cout << " v_aux attempting to store 0 in pos: " << i << std::endl;
@@ -116,7 +116,21 @@ uint64_t LF(wm &wm, std::map<uint64_t, uint64_t> &C, int search_span, uint64_t s
 }
 int main(int argc, char **argv){
     uint64_t i;
+    int column_a_idx = 0, column_b_idx = 0, column_c_idx = 0, column_d_idx = 0, column_a_value = 0, column_b_value = 0, column_c_value = 0, column_d_value = 0;
+    bool has_filtered_columns = false;
+    if(argc == 6){
+        column_a_idx = atoi(argv[2]);
+        column_b_idx = atoi(argv[3]);
+        column_c_idx = atoi(argv[4]);
+        column_d_idx = atoi(argv[5]);
+        has_filtered_columns = true;
+        std::cout << " Working with 4 columns: " << column_a_idx << ", " << column_b_idx << ", "  << column_c_idx << ", "  << column_d_idx <<std::endl;
+    }else{
+        std::cout << " Working with ALL columns..."<<std::endl;
+    }
     std::string file= argv[1];
+    
+    
     char delim = ' ';
     int num_of_rows = 0;
     //std::vector<wm> wavelet_matrices;//WE actually dont need to store the L_i! TODO: define rrr_vector block param
@@ -135,9 +149,32 @@ int main(int argc, char **argv){
             // construct a stream from the string
             std::stringstream ss(str_line);
             std::string s;
+            int col_idx = 1;
             while (std::getline(ss, s, delim)) {
-                int i = std::stoi(s);
-                aux.push_back((uint64_t) i);
+                if(has_filtered_columns){
+                    if(col_idx == column_a_idx ){
+                        column_a_value = std::stoi(s);
+                    } else if(col_idx == column_b_idx ){
+                        column_b_value = std::stoi(s);
+                    } else if(col_idx == column_c_idx ){
+                        column_c_value = std::stoi(s);
+                    } else if(col_idx == column_d_idx ){
+                        column_d_value = std::stoi(s);
+                    }
+                    col_idx++;
+                }
+                else{
+                    int i = std::stoi(s);
+                    aux.push_back((uint64_t) i);
+                }
+            }
+            //4 columns experiment
+            if(has_filtered_columns){
+                aux.push_back(column_a_value);
+                aux.push_back(column_b_value);
+                aux.push_back(column_c_value);
+                aux.push_back(column_d_value);
+                std::cout << "A (col idx : " << column_a_idx << ", " << column_a_value <<" ) " << "B (col idx : " << column_b_idx << ", " << column_b_value <<" ) "<< "C (col idx : " << column_c_idx << ", " << column_c_value <<" ) " << "D (col idx : " << column_d_idx << ", " << column_d_value <<" ) "<< std::endl;
             }
             table.push_back(aux);
         }
@@ -169,6 +206,7 @@ int main(int argc, char **argv){
 
         std::cout << "creating Wavelet trees"  << std::endl;
         construct_im(wm_aux, v);
+        std::cout << "Wavelet matrix : " << wm_aux << std::endl;
         //wavelet_matrices.push_back(wm_aux);//--to be commented
         sdsl::store_to_file(wm_aux, file + "_0.WM");
         std::cout << " > wavelet tree #1 ready" << std::endl;
@@ -188,6 +226,7 @@ int main(int argc, char **argv){
                 v[j] = L[L_last_pos][j];
             }
             construct_im(wm_aux, v);
+            std::cout << "Wavelet matrix : " << wm_aux << std::endl;
             //wavelet_matrices.push_back(wm_aux); // to be commented
             sdsl::store_to_file(wm_aux, file + "_"+std::to_string(i)+".WM");
             std::cout << " > wavelet tree #" <<  i+1 << " ready" << std::endl;

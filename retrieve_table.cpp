@@ -25,7 +25,7 @@ C_select_type C_select;
 C_select0_type C_select0;
 
 uint64_t LF(wm &wm, C_select_type &C_select, int search_span, uint64_t symbol){
-    //std::cout << "results C_select(symbol+1):" << C_select(symbol+1) << " wm.rank : " << wm.rank(search_span + 1,symbol) << " rank : " << wm.rank(search_span + 1,symbol) << " Symbol : " << symbol << " search_span : " << search_span + 1 << std::endl;
+    std::cout << "results C_select(symbol+1):" << C_select(symbol+1) << " wm.rank : " << wm.rank(search_span + 1,symbol) << " rank : " << wm.rank(search_span + 1,symbol) << " Symbol : " << symbol << " search_span : " << search_span + 1 << std::endl;
     return C_select(symbol+1)-symbol-1 + wm.rank(search_span + 1,symbol);
 }
 int main(int argc, char **argv){
@@ -51,6 +51,7 @@ int main(int argc, char **argv){
         for ( int i = 0 ; i < num_of_columns; i++){
             wm wm_aux;
             sdsl::load_from_file(wm_aux, file+"_"+std::to_string(i)+".WM");
+            std::cout << "Wavelet matrix : " << wm_aux << std::endl;
             wavelet_matrices.push_back(wm_aux);
             //loading C's
             {

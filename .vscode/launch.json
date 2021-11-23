@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/compress_table",
             //"args": ["../../../Ring/dat/wikidata-filtered-enumerated.dat"],
             //"args": ["../../../Ring/dat/wikidata-filtered-enumerated-reduced.dat"],
-            "args": ["test.dat"],
+            "args": ["test.dat", "4", "7", "15", "1"],
             //"args": ["dl_attempts_export.csv_mapping.dat"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
