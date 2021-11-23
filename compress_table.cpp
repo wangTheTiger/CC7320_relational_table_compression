@@ -174,7 +174,7 @@ int main(int argc, char **argv){
                 aux.push_back(column_b_value);
                 aux.push_back(column_c_value);
                 aux.push_back(column_d_value);
-                std::cout << "A (col idx : " << column_a_idx << ", " << column_a_value <<" ) " << "B (col idx : " << column_b_idx << ", " << column_b_value <<" ) "<< "C (col idx : " << column_c_idx << ", " << column_c_value <<" ) " << "D (col idx : " << column_d_idx << ", " << column_d_value <<" ) "<< std::endl;
+                //std::cout << "A (col idx : " << column_a_idx << ", " << column_a_value <<" ) " << "B (col idx : " << column_b_idx << ", " << column_b_value <<" ) "<< "C (col idx : " << column_c_idx << ", " << column_c_value <<" ) " << "D (col idx : " << column_d_idx << ", " << column_d_value <<" ) "<< std::endl;
             }
             table.push_back(aux);
         }
@@ -206,7 +206,7 @@ int main(int argc, char **argv){
 
         std::cout << "creating Wavelet trees"  << std::endl;
         construct_im(wm_aux, v);
-        std::cout << "Wavelet matrix : " << wm_aux << std::endl;
+        //std::cout << "Wavelet matrix : " << wm_aux << std::endl;
         //wavelet_matrices.push_back(wm_aux);//--to be commented
         sdsl::store_to_file(wm_aux, file + "_0.WM");
         std::cout << " > wavelet tree #1 ready" << std::endl;
@@ -226,7 +226,7 @@ int main(int argc, char **argv){
                 v[j] = L[L_last_pos][j];
             }
             construct_im(wm_aux, v);
-            std::cout << "Wavelet matrix : " << wm_aux << std::endl;
+            //std::cout << "Wavelet matrix : " << wm_aux << std::endl;
             //wavelet_matrices.push_back(wm_aux); // to be commented
             sdsl::store_to_file(wm_aux, file + "_"+std::to_string(i)+".WM");
             std::cout << " > wavelet tree #" <<  i+1 << " ready" << std::endl;
