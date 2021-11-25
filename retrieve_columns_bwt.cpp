@@ -31,6 +31,9 @@ uint64_t LF(wm &wm, C_select_type &C_select, int search_span, uint64_t symbol){
 int main(int argc, char **argv){
     uint64_t i;
     std::string file= argv[1];
+    int start_row = atoi(argv[2]);
+    int row_interval = atoi(argv[3]);
+    int end_row = atoi(argv[4]);
     int num_of_rows = 0, num_of_columns = 0;
     std::vector<wm> wavelet_matrices;
     //std::vector<C_select_type> C;
@@ -47,7 +50,7 @@ int main(int argc, char **argv){
         std::ifstream ifs(file + ".metadata");
         ifs >> num_of_rows;
         ifs >> num_of_columns;
-        std::cout << "file: " << file << " num_of_rows : " << num_of_rows << " num_of_columns : " << num_of_columns << std::endl;
+
         for ( int i = 0 ; i < num_of_columns; i++){
             wm wm_aux;
             sdsl::load_from_file(wm_aux, file+"_"+std::to_string(i)+".WM");
@@ -66,7 +69,7 @@ int main(int argc, char **argv){
         }
         //RETRIEVAL
         uint64_t current_value = 0;
-        for (int j = 0 ; j < num_of_rows; j++){
+        for (int j = ( start_row -1 )* num_of_columns ; j < (end_row - 1 ) * num_of_columns; j= j + row_interval * num_of_columns){
             int row_num=j;
             int current_column_id = row_num;
             std::string tmp_str = "";
@@ -78,7 +81,7 @@ int main(int argc, char **argv){
                 current_column_id -= 1;
                 //std::cout << "current_column_id = " << current_column_id << std::endl;
             }
-            std::cout << "Retrieving row # "<< row_num + 1 << " : " << tmp_str << std::endl;
+            std::cout << "Retrieving row # "<< row_num << " : " << tmp_str << std::endl;
         }
     }
     //apply_front_coding_and_vlc(D, file);

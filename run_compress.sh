@@ -41,23 +41,23 @@ calc_compress $file $column_1 $column_2 $column_4 $column_3
 
 calc_compress $file $column_2 $column_1 $column_3 $column_4
 calc_compress $file $column_2 $column_3 $column_1 $column_4
-#calc_compress $file $column_2 $column_3 $column_4 $column_1
-#calc_compress $file $column_2 $column_4 $column_3 $column_1
-#calc_compress $file $column_2 $column_4 $column_1 $column_3
-#calc_compress $file $column_2 $column_1 $column_4 $column_3
+calc_compress $file $column_2 $column_3 $column_4 $column_1
+calc_compress $file $column_2 $column_4 $column_3 $column_1
+calc_compress $file $column_2 $column_4 $column_1 $column_3
+calc_compress $file $column_2 $column_1 $column_4 $column_3
 
-#calc_compress $file $column_3 $column_1 $column_2 $column_4
-#calc_compress $file $column_3 $column_2 $column_1 $column_4
-#calc_compress $file $column_3 $column_2 $column_4 $column_1
-#calc_compress $file $column_3 $column_4 $column_2 $column_1
-#calc_compress $file $column_3 $column_4 $column_1 $column_2
-#calc_compress $file $column_3 $column_1 $column_4 $column_2
+calc_compress $file $column_3 $column_1 $column_2 $column_4
+calc_compress $file $column_3 $column_2 $column_1 $column_4
+calc_compress $file $column_3 $column_2 $column_4 $column_1
+calc_compress $file $column_3 $column_4 $column_2 $column_1
+calc_compress $file $column_3 $column_4 $column_1 $column_2
+calc_compress $file $column_3 $column_1 $column_4 $column_2
 
-#calc_compress $file $column_4 $column_1 $column_2 $column_3
-#calc_compress $file $column_4 $column_2 $column_1 $column_3
-#calc_compress $file $column_4 $column_2 $column_3 $column_1
-#calc_compress $file $column_4 $column_3 $column_2 $column_1
-#calc_compress $file $column_4 $column_3 $column_1 $column_2
-#calc_compress $file $column_4 $column_1 $column_3 $column_2
+calc_compress $file $column_4 $column_1 $column_2 $column_3
+calc_compress $file $column_4 $column_2 $column_1 $column_3
+calc_compress $file $column_4 $column_2 $column_3 $column_1
+calc_compress $file $column_4 $column_3 $column_2 $column_1
+calc_compress $file $column_4 $column_3 $column_1 $column_2
+calc_compress $file $column_4 $column_1 $column_3 $column_2
 #    i=$(($i + 1 ))
 #done

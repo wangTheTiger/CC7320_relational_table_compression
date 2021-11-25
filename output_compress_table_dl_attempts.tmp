@@ -1,0 +1,84 @@
+[fabrizio@testmachine CC7320_relational_table_compression]$ ./compress_table dl_attempts_export.csv_mapping.dat
+ Working with ALL columns...                                                                                                     
+--Loaded 8544550 rows with 14 columns each.                     
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 14
+creating Wavelet trees                                          
+ > wavelet tree #1 ready                                                                                                         
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 14
+ > wavelet tree #2 ready                                                                                                         
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 14
+ > wavelet tree #3 ready                                                                                                         
+ max_alphabet: 18254966 alphabet size : 9127 num_rows : 8544550 last_column_id: 14
+ > wavelet tree #4 ready                                                                                                         
+ max_alphabet: 4823334 alphabet size : 5 num_rows : 8544550 last_column_id: 14
+ > wavelet tree #5 ready                                                                                                         
+ max_alphabet: 15594142 alphabet size : 12 num_rows : 8544550 last_column_id: 14
+ > wavelet tree #6 ready                                                                                                         
+ max_alphabet: 18256929 alphabet size : 683034 num_rows : 8544550 last_column_id: 14
+ > wavelet tree #7 ready                                                                                                         
+ max_alphabet: 18094257 alphabet size : 3341 num_rows : 8544550 last_column_id: 14
+ > wavelet tree #8 ready                                                                                                         
+ max_alphabet: 18170046 alphabet size : 8285 num_rows : 8544550 last_column_id: 14
+ > wavelet tree #9 ready                                        
+ max_alphabet: 18256927 alphabet size : 2780211 num_rows : 8544550 last_column_id: 14
+ > wavelet tree #10 ready                                                                                                        
+ max_alphabet: 18256946 alphabet size : 5960683 num_rows : 8544550 last_column_id: 14 
+ > wavelet tree #11 ready                                                                                                        
+ max_alphabet: 18256946 alphabet size : 5964815 num_rows : 8544550 last_column_id: 14 
+ > wavelet tree #12 ready                                                                                                        
+ max_alphabet: 18151516 alphabet size : 7700 num_rows : 8544550 last_column_id: 14    
+ > wavelet tree #13 ready                                                                                                        
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 14 
+ > wavelet tree #14 ready                                                                   
+ 1880 seconds.                                                   
+331905360 bytes.                                                                                                                 
+[fabrizio@testmachine CC7320_relational_table_compression]$ du -c -h dl_attempts_export.csv_mapping.dat_                         
+dl_attempts_export.csv_mapping.dat_0.C          dl_attempts_export.csv_mapping.dat_3.C                                           
+dl_attempts_export.csv_mapping.dat_0.WM         dl_attempts_export.csv_mapping.dat_3.WM                                          
+dl_attempts_export.csv_mapping.dat_10.C         dl_attempts_export.csv_mapping.dat_4.C                                           
+dl_attempts_export.csv_mapping.dat_10.WM        dl_attempts_export.csv_mapping.dat_4.WM                                          
+dl_attempts_export.csv_mapping.dat_11.C         dl_attempts_export.csv_mapping.dat_5.C                                           
+dl_attempts_export.csv_mapping.dat_11.WM        dl_attempts_export.csv_mapping.dat_5.WM                                          
+dl_attempts_export.csv_mapping.dat_12.C         dl_attempts_export.csv_mapping.dat_6.C                                           
+dl_attempts_export.csv_mapping.dat_12.WM        dl_attempts_export.csv_mapping.dat_6.WM   
+dl_attempts_export.csv_mapping.dat_13.C         dl_attempts_export.csv_mapping.dat_7.C                                           
+dl_attempts_export.csv_mapping.dat_13.WM        dl_attempts_export.csv_mapping.dat_7.WM                                          
+dl_attempts_export.csv_mapping.dat_14.C         dl_attempts_export.csv_mapping.dat_8.C                                           
+dl_attempts_export.csv_mapping.dat_14.WM        dl_attempts_export.csv_mapping.dat_8.WM                                          
+dl_attempts_export.csv_mapping.dat_1.C          dl_attempts_export.csv_mapping.dat_9.C                                           
+dl_attempts_export.csv_mapping.dat_1.WM         dl_attempts_export.csv_mapping.dat_9.WM                                          
+dl_attempts_export.csv_mapping.dat_2.C          dl_attempts_export.csv_mapping.dat_mapping.dat                                   
+dl_attempts_export.csv_mapping.dat_2.WM                                                                                          
+[fabrizio@testmachine CC7320_relational_table_compression]$ du -c -h dl_attempts_export.csv_mapping.dat_*                        
+3.2M    dl_attempts_export.csv_mapping.dat_0.C                                                                                   
+9.6M    dl_attempts_export.csv_mapping.dat_0.WM                                                                                  
+3.2M    dl_attempts_export.csv_mapping.dat_10.C                                                                                  
+20M     dl_attempts_export.csv_mapping.dat_10.WM                                                                                 
+3.2M    dl_attempts_export.csv_mapping.dat_11.C                                                                                  
+16M     dl_attempts_export.csv_mapping.dat_11.WM                                                                                 
+3.2M    dl_attempts_export.csv_mapping.dat_12.C                                                                                  
+18M     dl_attempts_export.csv_mapping.dat_12.WM                                                                                 
+3.2M    dl_attempts_export.csv_mapping.dat_13.C                                                                                  
+25M     dl_attempts_export.csv_mapping.dat_13.WM                                                                                 
+3.2M    dl_attempts_export.csv_mapping.dat_14.C                                                                                  
+24M     dl_attempts_export.csv_mapping.dat_14.WM                                                                                 
+3.2M    dl_attempts_export.csv_mapping.dat_1.C                                                                                   
+11M     dl_attempts_export.csv_mapping.dat_1.WM                                                                                  
+3.2M    dl_attempts_export.csv_mapping.dat_2.C                                                                                   
+11M     dl_attempts_export.csv_mapping.dat_2.WM                                                                                  
+3.2M    dl_attempts_export.csv_mapping.dat_3.C                                                                                   
+9.2M    dl_attempts_export.csv_mapping.dat_3.WM                                                                                  
+1.6M    dl_attempts_export.csv_mapping.dat_4.C                                                                                   
+8.2M    dl_attempts_export.csv_mapping.dat_4.WM                                                                                  
+2.9M    dl_attempts_export.csv_mapping.dat_5.C                                                                                   
+8.5M    dl_attempts_export.csv_mapping.dat_5.WM                                                                                  
+3.2M    dl_attempts_export.csv_mapping.dat_6.C                  
+21M     dl_attempts_export.csv_mapping.dat_6.WM                                                                                  
+3.2M    dl_attempts_export.csv_mapping.dat_7.C                                                                                   
+13M     dl_attempts_export.csv_mapping.dat_7.WM                                                                                  
+3.2M    dl_attempts_export.csv_mapping.dat_8.C                                                                                   
+11M     dl_attempts_export.csv_mapping.dat_8.WM                                                                                  
+3.2M    dl_attempts_export.csv_mapping.dat_9.C                                                                                   
+25M     dl_attempts_export.csv_mapping.dat_9.WM                                                                                  
+4.0K    dl_attempts_export.csv_mapping.dat_mapping.dat                                                                           
+270M    total                                                            

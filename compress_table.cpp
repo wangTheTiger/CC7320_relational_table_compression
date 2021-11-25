@@ -34,14 +34,14 @@ std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::string filen
     uint64_t num_rows = table.size();
     //calculate alphabet. It also calculates L in first loop
     std::set<uint64_t> alphabet;
-    int last_column_id = table[0].size() - 1;
+    int last_column_id = table[0].size();
     for (i = 0; i < num_rows; i++){
-        uint64_t number = table[i][last_column_id];
+        uint64_t number = table[i][last_column_id - 1];
         alphabet.insert(number);
         l.push_back(number);
     }
     uint64_t max_alphabet = *alphabet.rbegin();
-    //std::cout << " max_alphabet: " << max_alphabet << " alphabet size : " << alphabet.size() << " num_rows : " << num_rows << " last_column_id: "<< last_column_id << std::endl;
+    std::cout << " max_alphabet: " << max_alphabet << " alphabet size : " << alphabet.size() << " num_rows : " << num_rows << " last_column_id: "<< last_column_id << std::endl;
     std::vector<uint64_t> v_aux(max_alphabet+1);
     for (i = 0; i <= max_alphabet; i++){
         //std::cout << " v_aux attempting to store 0 in pos: " << i << std::endl;
@@ -49,7 +49,7 @@ std::vector<uint64_t> get_last_column_as_vector(matrix &table, std::string filen
     }
     for (i = 0; i < num_rows; i++){
         //std::cout << " table[i][last_column_id] : " << table[i][last_column_id] << std::endl;
-        v_aux[table[i][last_column_id]]++;
+        v_aux[table[i][last_column_id - 1]]++;
     }
     //Calculate C array
     uint64_t cur_pos = 1;

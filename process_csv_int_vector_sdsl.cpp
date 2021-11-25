@@ -69,13 +69,19 @@ int main(int argc, char **argv){
         }
     }
     //Save the data as binary file.
-    sdsl::store_to_file(v, file_name + "_mapping.dat");
+    sdsl::store_to_file(v, file_name + "_INT_VECTOR");
     //sdsl::store_to_file(v, file_name + "_mapping.dat");
     std::cout << " rows processed : " << counter << " |alphabet| : " << m.size() << " |entries| : "<< entries << " bytes per entry :"<< sdsl::size_in_bytes(v) / entries <<" in_if: " << in_if << std::endl;
     //std::cout << v << std::endl;
     std::cout << "int vector size in bytes : " << sdsl::size_in_bytes(v) << std::endl;
     sdsl::util::bit_compress(v);
     std::cout << "int vector size in bytes (after compression): " << sdsl::size_in_bytes(v) << std::endl;
+
+    std::ofstream ofs(file_name + ".metadata");
+    ofs << counter << std::endl;//num of rows
+    //TODO: arreglar este calculo, da 14 en vez de 15 para dl_attempts.. por eso la tupla contiene trozos de otras filas.
+    ofs << entries / counter << std::endl; //num of columns
+    ofs.close();
     auto stop = timer::now();
     sdsl::memory_monitor::stop();
 
