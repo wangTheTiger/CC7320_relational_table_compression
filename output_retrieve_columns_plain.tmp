@@ -1,0 +1,11 @@
+ rows processed : 8544550 int vector size : 119623700 |alphabet| : 18256946 |entries| : 119623700 bytes per entry :4 in_if: 18256946
+int vector size in bytes : 478494808
+int vector size in bytes (after compression): 373824072
+129 seconds.
+478494800 bytes.
+num_of_rows : 8544550 num_of_columns : 14
+Loading file. Milliseconds : 0.453666 seconds: 0
+Int vector size: 119623700
+start_row : 1 end_row : 8500000 interval : 1000
+Retrieving rows. Milliseconds : 0.012307 seconds: 0
+478494800 bytes.

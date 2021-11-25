@@ -38,8 +38,8 @@ int main(int argc, char **argv){
     std::vector<wm> wavelet_matrices;
     //std::vector<C_select_type> C;
     sdsl::memory_monitor::start();
-    auto start = timer::now();
     {
+        auto start = timer::now();
         int num_of_rows = 0, num_of_columns = 0;
         std::vector<wm> wavelet_matrices;
         //std::vector<std::map<uint64_t, uint64_t>> C;
@@ -50,7 +50,7 @@ int main(int argc, char **argv){
         std::ifstream ifs(file + ".metadata");
         ifs >> num_of_rows;
         ifs >> num_of_columns;
-
+        std::cout << "num_of_rows : " << num_of_rows << " num_of_columns : " << num_of_columns << std::endl;
         for ( int i = 0 ; i < num_of_columns; i++){
             wm wm_aux;
             sdsl::load_from_file(wm_aux, file+"_"+std::to_string(i)+".WM");
@@ -67,9 +67,15 @@ int main(int argc, char **argv){
 
             }
         }
+
+        auto stop = timer::now();
+        std::chrono::duration<double> diff = stop - start;
+        std::cout << "Loading file. Milliseconds : " << diff.count() << " seconds: " << std::chrono::duration_cast<std::chrono::seconds>(stop-start).count() << std::endl;
         //RETRIEVAL
+        //TODO: por algun motivo no retorna el row num exacto que imprimo pero el resultado (tmp_str) es valido.
+        start = timer::now();
         uint64_t current_value = 0;
-        for (int j = ( start_row -1 )* num_of_columns ; j < (end_row - 1 ) * num_of_columns; j= j + row_interval * num_of_columns){
+        for (int j = ( start_row -1 ); j < (end_row - 1 ); j= j + row_interval){
             int row_num=j;
             int current_column_id = row_num;
             std::string tmp_str = "";
@@ -81,14 +87,15 @@ int main(int argc, char **argv){
                 current_column_id -= 1;
                 //std::cout << "current_column_id = " << current_column_id << std::endl;
             }
-            std::cout << "Retrieving row # "<< row_num << " : " << tmp_str << std::endl;
+            //std::cout << "Retrieving row # "<< row_num << " : " << tmp_str << std::endl; -- UNCOMMENT TO PRINT THE ROWS.
         }
+        stop = timer::now();
+        diff = stop - start;
+        std::cout << "Retrieving rows. Milliseconds : " << diff.count() << " seconds: " << std::chrono::duration_cast<std::chrono::seconds>(stop-start).count() << std::endl;
     }
     //apply_front_coding_and_vlc(D, file);
-    auto stop = timer::now();
     sdsl::memory_monitor::stop();
 
-    std::cout << std::chrono::duration_cast<std::chrono::seconds>(stop-start).count() << " seconds." << std::endl;
     std::cout << sdsl::memory_monitor::peak() << " bytes." << std::endl;
     return 0;
 }

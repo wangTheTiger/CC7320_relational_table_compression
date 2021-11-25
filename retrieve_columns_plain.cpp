@@ -28,8 +28,9 @@ int main(int argc, char **argv){
     int num_of_rows = 0, num_of_columns = 0;
     //std::vector<C_select_type> C;
     sdsl::memory_monitor::start();
-    auto start = timer::now();
     {
+        auto start = timer::now();
+
         int num_of_rows = 0, num_of_columns = 0, current_row = start_row - 1;
         //TEST LOADING FROM FILE AND RETRIEVING.
         std::ifstream ifs(file + ".metadata");
@@ -38,9 +39,15 @@ int main(int argc, char **argv){
         std::cout << "num_of_rows : " << num_of_rows << " num_of_columns : " << num_of_columns << std::endl;
         sdsl::int_vector<32> v(num_of_rows * num_of_columns);
         sdsl::load_from_file(v, file + "_INT_VECTOR");
+
+        auto stop = timer::now();
+        std::chrono::duration<double> diff = stop - start;
+        std::cout << "Loading file. Milliseconds : " << diff.count() << " seconds: " << std::chrono::duration_cast<std::chrono::seconds>(stop-start).count() << std::endl;
         std::cout << "Int vector size: " << v.size() << std::endl;
         //retrieval
         std::cout << "start_row : " << start_row << " end_row : " << end_row << " interval : " << row_interval << std::endl;
+
+        start = timer::now();
         for (int j = ( start_row -1 )* num_of_columns ; j < (end_row - 1 ) * num_of_columns; j= j + row_interval * num_of_columns){
             std::string tmp_str = "";
             for ( int x = 0; x < num_of_columns; x++){
@@ -48,13 +55,14 @@ int main(int argc, char **argv){
                 tmp_str += std::to_string(v[j+x])+ " ";
             }
             current_row = current_row + row_interval;
-            std::cout << "Retrieving row # "<< current_row << " : " << tmp_str << std::endl;
+            //std::cout << "Retrieving row # "<< current_row << " : " << tmp_str << std::endl; -- UNCOMMENT TO PRINT THE ROWS.
         }
+
+        stop = timer::now();
+        diff = stop - start;
+        std::cout << "Retrieving rows. Milliseconds : " << diff.count() << " seconds: " << std::chrono::duration_cast<std::chrono::seconds>(stop-start).count() << std::endl;
     }
-    auto stop = timer::now();
     sdsl::memory_monitor::stop();
-    std::chrono::duration<double> diff = stop - start;
-    std::cout << diff.count() << " Milliseconds , " << std::chrono::duration_cast<std::chrono::seconds>(stop-start).count() << " seconds." << std::endl;
     std::cout << sdsl::memory_monitor::peak() << " bytes." << std::endl;
     return 0;
 }

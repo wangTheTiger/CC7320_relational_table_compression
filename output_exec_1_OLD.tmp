@@ -1,0 +1,363 @@
+Building...
+working file : dl_attempts_export.csv_mapping.dat
+Processing...
+ Working with 4 columns: 12, 13, 14, 1
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+450 seconds.
+307000216 bytes.
+column order: 12 13 14 1
+59828	total
+ Working with 4 columns: 12, 14, 13, 1
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+435 seconds.
+307000216 bytes.
+column order: 12 14 13 1
+59776	total
+ Working with 4 columns: 12, 14, 1, 13
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+469 seconds.
+301305424 bytes.
+column order: 12 14 1 13
+59696	total
+ Working with 4 columns: 12, 1, 14, 13
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+525 seconds.
+301305784 bytes.
+column order: 12 1 14 13
+59472	total
+ Working with 4 columns: 12, 1, 13, 14
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+545 seconds.
+300027320 bytes.
+column order: 12 1 13 14
+59476	total
+ Working with 4 columns: 12, 13, 1, 14
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+506 seconds.
+300026976 bytes.
+column order: 12 13 1 14
+59612	total
+ Working with 4 columns: 13, 12, 14, 1
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+437 seconds.
+307718552 bytes.
+column order: 13 12 14 1
+59696	total
+ Working with 4 columns: 13, 14, 12, 1
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+416 seconds.
+307721720 bytes.
+column order: 13 14 12 1
+59476	total
+ Working with 4 columns: 13, 14, 1, 12
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+565 seconds.
+301260736 bytes.
+column order: 13 14 1 12
+59828	total
+ Working with 4 columns: 13, 1, 14, 12
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+540 seconds.
+301557416 bytes.
+column order: 13 1 14 12
+59612	total
+ Working with 4 columns: 13, 1, 12, 14
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+630 seconds.
+300489568 bytes.
+column order: 13 1 12 14
+59776	total
+ Working with 4 columns: 13, 12, 1, 14
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+479 seconds.
+300021976 bytes.
+column order: 13 12 1 14
+59472	total
+ Working with 4 columns: 14, 12, 13, 1
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+427 seconds.
+306906896 bytes.
+column order: 14 12 13 1
+59612	total
+ Working with 4 columns: 14, 13, 12, 1
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+397 seconds.
+307627384 bytes.
+column order: 14 13 12 1
+59472	total
+ Working with 4 columns: 14, 13, 1, 12
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+571 seconds.
+301166096 bytes.
+column order: 14 13 1 12
+59776	total
+ Working with 4 columns: 14, 1, 13, 12
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+532 seconds.
+300309504 bytes.
+column order: 14 1 13 12
+59696	total
+ Working with 4 columns: 14, 1, 12, 13
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+632 seconds.
+301209240 bytes.
+column order: 14 1 12 13
+59828	total
+ Working with 4 columns: 14, 12, 1, 13
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+455 seconds.
+301206336 bytes.
+column order: 14 12 1 13
+59476	total
+ Working with 4 columns: 1, 12, 13, 14
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+708 seconds.
+300460064 bytes.
+column order: 1 12 13 14
+59828	total
+ Working with 4 columns: 1, 13, 12, 14
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+610 seconds.
+300460064 bytes.
+column order: 1 13 12 14
+59696	total
+ Working with 4 columns: 1, 13, 14, 12
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+580 seconds.
+300611992 bytes.
+column order: 1 13 14 12
+59476	total
+ Working with 4 columns: 1, 14, 13, 12
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+562 seconds.
+300611992 bytes.
+column order: 1 14 13 12
+59472	total
+ Working with 4 columns: 1, 14, 12, 13
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+613 seconds.
+301219648 bytes.
+column order: 1 14 12 13
+59612	total
+ Working with 4 columns: 1, 12, 14, 13
+--Loaded 8544550 rows with 4 columns each. 
+ max_alphabet: 18256723 alphabet size : 10239 num_rows : 8544550 last_column_id: 3
+creating Wavelet trees
+ > wavelet tree #1 ready
+ max_alphabet: 17912769 alphabet size : 1193 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #2 ready
+ max_alphabet: 18256038 alphabet size : 18409 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #3 ready
+ max_alphabet: 18256945 alphabet size : 8544550 num_rows : 8544550 last_column_id: 3
+ > wavelet tree #4 ready
+699 seconds.
+301219648 bytes.
+column order: 1 12 14 13
+59776	total

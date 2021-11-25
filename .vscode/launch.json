@@ -74,6 +74,29 @@
             "miDebuggerPath": "/usr/bin/gdb"
         },
         {
+            "name": "relational_table_compression process_csv_int_vector_sdsl",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/process_csv_int_vector_sdsl",
+            //"args": ["../../../Ring/dat/wikidata-filtered-enumerated.dat"],
+            //"args": ["../../../Ring/dat/wikidata-filtered-enumerated-reduced.dat"],
+            //"args": ["test.dat"],
+            "args": ["dl_attempts_export.csv"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
             "name": "relational_table_compression retrieve_columns_bwt",
             "type": "cppdbg",
             "request": "launch",
@@ -81,7 +104,30 @@
             //"args": ["../../../Ring/dat/wikidata-filtered-enumerated.dat"],
             //"args": ["../../../Ring/dat/wikidata-filtered-enumerated-reduced.dat"],
             //"args": ["test.dat"],
-            "args": ["dl_attempts_export.csv_mapping.dat", "1", "500", "1000"],
+            "args": ["dl_attempts_export.csv_mapping.dat", "1", "1000", "8500000"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "relational_table_compression retrieve_columns_plain",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/retrieve_columns_plain",
+            //"args": ["../../../Ring/dat/wikidata-filtered-enumerated.dat"],
+            //"args": ["../../../Ring/dat/wikidata-filtered-enumerated-reduced.dat"],
+            //"args": ["test.dat"],
+            "args": ["dl_attempts_export.csv", "1", "1000", "8500000"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
