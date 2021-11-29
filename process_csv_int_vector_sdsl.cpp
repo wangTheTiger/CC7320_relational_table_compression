@@ -92,7 +92,6 @@ int main(int argc, char **argv){
 
     std::ofstream ofs(file_name + ".metadata");
     ofs << counter << std::endl;//num of rows
-    //TODO: arreglar este calculo, da 14 en vez de 15 para dl_attempts.. por eso la tupla contiene trozos de otras filas.
     ofs << entries / counter << std::endl; //num of columns
     ofs.close();
     auto stop = timer::now();

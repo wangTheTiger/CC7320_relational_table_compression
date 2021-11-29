@@ -8,13 +8,15 @@ die () {
 
 
 calc_compress() {
-    ./compress_table $1 $2 $3 $4 $5
+   ./compress_table $1 $2 $3 $4 $5
 
     echo "column order: $2 $3 $4 $5"
-    du -c ${1}_* | grep "total" # -h 
+    ls -l ${1}_*
+    du -c ${1}_* | grep "total" # -h
+    rm -f ${1}_*
 }
 echo "Building..."
-./build_release.sh
+#./build_release.sh
 file="test.dat"
 if [ -n "$1" ];
 then
@@ -32,6 +34,7 @@ echo "Processing..."
 #do
 
 #4! = 24 permutations
+rm -f ${file}_*.*
 calc_compress $file $column_1 $column_2 $column_3 $column_4
 calc_compress $file $column_1 $column_3 $column_2 $column_4
 calc_compress $file $column_1 $column_3 $column_4 $column_2
