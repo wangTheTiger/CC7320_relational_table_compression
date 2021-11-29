@@ -1,0 +1,1 @@
+# CC7320_relational_table_compression
